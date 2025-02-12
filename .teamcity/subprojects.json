@@ -308,6 +308,13 @@
     "crossVersionTests": false
   },
   {
+    "name": "daemon-server-worker",
+    "path": "platforms/core-execution/daemon-server-worker",
+    "unitTests": true,
+    "functionalTests": false,
+    "crossVersionTests": false
+  },
+  {
     "name": "daemon-services",
     "path": "platforms/core-runtime/daemon-services",
     "unitTests": true,
@@ -1101,7 +1108,7 @@
   {
     "name": "request-handler-worker",
     "path": "platforms/core-execution/request-handler-worker",
-    "unitTests": false,
+    "unitTests": true,
     "functionalTests": false,
     "crossVersionTests": false
   },
