@@ -26,6 +26,7 @@ import org.gradle.cache.internal.CrossBuildInMemoryCache;
 import org.gradle.cache.internal.CrossBuildInMemoryCacheFactory;
 import org.gradle.internal.Cast;
 import org.gradle.internal.UncheckedException;
+import org.gradle.internal.classloader.FilteringClassLoader;
 import org.gradle.internal.concurrent.Stoppable;
 import org.gradle.internal.dispatch.StreamCompletion;
 import org.gradle.internal.instantiation.InstantiatorFactory;
@@ -79,11 +80,19 @@ public class WorkerAction implements Action<WorkerProcessContext>, Serializable,
     @Nonnull
     private static PayloadSerializer createPayloadSerializer() {
         ClassLoaderCache classLoaderCache = new ClassLoaderCache();
+
+        ClassLoader parent = WorkerAction.class.getClassLoader();
+        FilteringClassLoader.Spec filterSpec = new FilteringClassLoader.Spec();
+        FilteringClassLoader modelClassLoader = new FilteringClassLoader(parent, filterSpec);
+
         return new PayloadSerializer(
             new WellKnownClassLoaderRegistry(
                 new DefaultPayloadClassLoaderRegistry(
                     classLoaderCache,
-                    new ModelClassLoaderFactory())));
+                    new ModelClassLoaderFactory(modelClassLoader)
+                )
+            )
+        );
     }
 
     @Override

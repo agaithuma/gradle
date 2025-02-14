@@ -17,6 +17,7 @@ dependencies {
     api(projects.serialization)
     api(projects.workerMain)
 
+    implementation(projects.classloaders)
     implementation(projects.persistentCache)
     implementation(projects.problemsApi)
     implementation(projects.serviceLookup)
