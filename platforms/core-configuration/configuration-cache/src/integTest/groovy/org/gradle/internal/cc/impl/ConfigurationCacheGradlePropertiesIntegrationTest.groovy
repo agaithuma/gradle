@@ -25,6 +25,32 @@ import static org.gradle.initialization.IGradlePropertiesLoader.SYSTEM_PROJECT_P
 
 class ConfigurationCacheGradlePropertiesIntegrationTest extends AbstractConfigurationCacheIntegrationTest {
 
+    def "humble beginnings"() {
+        given:
+        def configurationCache = newConfigurationCacheFixture()
+        buildFile '''
+            tasks.register('ok') {
+                doLast {
+                    println('it works!')
+                }
+            }
+        '''
+
+        when:
+        configurationCacheRun "ok", "-PgradleProp=1"
+
+        then:
+        outputContains 'it works!'
+        configurationCache.assertStateStored()
+
+        when:
+        configurationCacheRun "ok", "-PgradleProp=2"
+
+        then:
+        outputContains 'it works!'
+        configurationCache.assertStateLoaded()
+    }
+
     def "invalidates cache when set of Gradle property defining system properties changes"() {
         given:
         def configurationCache = newConfigurationCacheFixture()
